@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+  <!-- keycode.info 에서 알수 있음 -->
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+<script>
+
+  function playSoundAnimation(event){
+    const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);//클래스를 지정해줄 수 있으나 인덱스 연산자를 통해 해당속성의 태그를 가져올 수 있다.
+    //$는 템플릿 스트링: 런타임 시점에 일반 자바스트립트 문자열로 처리/변환 쉽게 말해 ``안에 변수가 들어 가야 할 때 사용. !주의 ''이 아니라 ``임
+    const key = document.querySelector(`.key[data-key="${event.keyCode}"]`); //선택자를 통해 해당 엘리먼트를 가져온다.
+   
+   
+    if(!audio)return; // stop the function from running all together 다른 키를 눌렀을 때 함수가 멈춤.
+    audio.currentTime = 0; // 누르면 오디오 파일을 처음 부터 실행.
+    audio.play();
+    
+    key.classList.add('playing'); // playing 이라는 클래스를 엘리먼트에 추가
+    
+  }
+
+  
+
+  const keys = document.querySelectorAll('.key');//key클래스의 엘리먼트들을 모아 배열로 저장한다.
+  //keys.addEventListener('transitionend'); transitionend는 css에서 지정된 transition 시간이 끝났을때 이다.
+  // 여기서 위와 같이 하지않는 이유는 keys는 엘리먼트들의 배열이므로 각각의 이벤트리스너를 제어 할 수 없다.
+  
+  function removeTransitionEnd(event){
+    if(event.propertyName !== 'transform')return; 
+    //console.log(event); 하면 transitionend이벤트가 많이 나온다.
+    //우리는 transform이라는 propertyName을 가진 transitionend만 볼것이다.
+    //이 상태에서 css의 transition을 건드리면 transform만 바뀌므로 테두리가 변하는 지속시간을 변경할 수 있다.
+    
+    //여기서 this는 함수를 호출한 대상. 따라서 key가 된다.
+    this.classList.remove('playing');
+  }
+  
+  
+  window.addEventListener('keydown',playSoundAnimation);
+  //forEach는 array객체에서만 사용가능 key라는 프로퍼티에 각각의 엘리먼트들을 담아 '=>'뒤의 과정을 실행.
+  keys.forEach(key => key.addEventListener('transitionend',removeTransitionEnd));
+  
+  
+
+</script>
+
+
+</body>
+</html>
