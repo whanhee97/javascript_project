@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://source.unsplash.com/7bwQXzbF6KE/800x500">
+
+  <style>
+    :root{
+      --base: yellow;
+      --spacing: 10px;
+      --blur: 10px;
+    }/*초기화*/
+    
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+
+    img{
+      padding: var(--spacing); /*css에서 변수 사용법*/
+      background: var(--base);
+      filter: blur(var(--blur));
+    }
+
+    .hl{
+      color: var(--base);
+    }
+
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width: 100px;
+    }
+  </style>
+
+  <script>
+    var inputs = document.querySelectorAll('input');// 인풋들을 모두 갖고와서
+    
+    
+    function handleUpdate(){
+      var suffix = this.dataset.sizing || ''; //suffix란 뒤에 붙는 단위값, dataset은 html태그에 data- 하고 준 모든 값이 나옴 
+      
+      if(this.name === 'spacing'){
+        document.documentElement.style.setProperty('--spacing',this.value + suffix); //css 사용자 속성에 접근하는법
+      }
+      else if(this.name === 'blur'){
+        document.documentElement.style.setProperty('--blur',this.value + suffix);
+      }
+      else{
+        document.documentElement.style.setProperty('--base',this.value + suffix);
+      }
+      
+      //위 if문을 document.documentElement.style.setProperty(`--${this.name}`,this.value + suffix); 으로 대체가능
+    }
+
+    inputs.forEach(input => input.addEventListener('change',handleUpdate)); //forEach를 통해 각각에 인풋에 이벤트리스너를 추가 할 수 있다.
+    inputs.forEach(input => input.addEventListener('mousemove',handleUpdate)); //마우스 움직일때 실시간으로 바뀌는걸 보여주기 위함.
+
+    
+
+  </script>
+
+</body>
+</html>
