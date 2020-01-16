@@ -61,7 +61,7 @@
 
   function playSoundAnimation(event){
     const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);//클래스를 지정해줄 수 있으나 인덱스 연산자를 통해 해당속성의 태그를 가져올 수 있다.
-    //$는 템플릿 스트링: 런타임 시점에 일반 자바스트립트 문자열로 처리/변환 쉽게 말해 ``안에 변수가 들어 가야 할 때 사용. !주의 ''이 아니라 ``임
+    //$는 템플릿 스트링: 런타임 시점에 일반 자바스트립트 문자열로 처리/변환, 쉽게 말해 ``안에 변수가 들어 가야 할 때 사용. !주의 ''이 아니라 ``임
     const key = document.querySelector(`.key[data-key="${event.keyCode}"]`); //선택자를 통해 해당 엘리먼트를 가져온다.
    
    
